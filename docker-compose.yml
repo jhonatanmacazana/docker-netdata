@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+  netdata:
+    cap_add:
+      - SYS_PTRACE
+    container_name: netdata
+    environment:
+      - PGID=999
+    expose:
+      - "19999"
+    hostname: machine.com
+    image: netdata/netdata:v1.30.0
+    ports:
+      - "19999:19999"
+    restart: unless-stopped
+    security_opt:
+      - apparmor=unconfined
+    volumes:
+      - /etc/group:/host/etc/group:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /etc/passwd:/host/etc/passwd:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - netdata-etc:/etc/netdata
+
+volumes:
+  netdata-etc:
